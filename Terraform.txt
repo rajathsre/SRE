@@ -4,7 +4,7 @@ Terraform Labs Steps
 Login to AWS Console
 
 
-###################################
+################################### 
 Lab 1: Creating an EC2 Instance in AWS and Installing Terraform
 ###################################
 
