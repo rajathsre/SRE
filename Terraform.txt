@@ -5,7 +5,7 @@ Login to AWS Console
 
 
 ###################################
-Lab 1: Creating an EC2 Instance in AWS and Installing Terraform
+Lab 1: Creating an EC2 Instance in AWS and Installing Terraform 
 ###################################
 
 Task 1: Installing Terraform on Ubuntu 20.04 operating system
