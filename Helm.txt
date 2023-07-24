@@ -62,6 +62,10 @@ helm list
 # to check in the specific name space
 helm list -n dev
 
+#to view all pods under all namespaces
+
+helm list --all-namespaces
+
 # delete nginx
 helm uninstall mywebserver
 
