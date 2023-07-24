@@ -38,7 +38,7 @@ helm repo update
 
 # Search chart in specific repo
 helm search repo bitnami/nginx
-helm search repo â€“l bitnami/mysql   #list all available versions 
+helm search repo -l bitnami/mysql   #list all available versions 
 helm search repo nginx --versions
 
 
