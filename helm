@@ -301,15 +301,23 @@ helm uninstall mychart2
 Lab: 5 Create package using chart
 =======================================
 
+ 
+
 helm package mychart
 ls
+
+ 
 
 
 Store Charts in chart repo
 mkdir charts
 chmod 777 charts
 
+ 
+
 # Install docker
+
+ 
 
 apt update -y
 apt install curl -y
@@ -317,7 +325,11 @@ curl -SSL https://get.docker.com/ | sh
 service docker status
 docker --version
 
+ 
+
 # rundocker container
+
+ 
 
 docker run -itd \
   -p 8080:8080 \
@@ -327,69 +339,101 @@ docker run -itd \
   -v $(pwd)/charts:/charts \
   ghcr.io/helm/chartmuseum:v0.14.0
 
+ 
+
 
 #check the container
 docker ps
 
+ 
+
 helm repo ls
 
-#add repo locally 
+ 
+
+#add repo locally
+
+ 
 
 helm repo add mychartrepo http://localhost:8080
 
+ 
+
 helm repo ls
 
+ 
+
 helm repo update  
+
+ 
 
 # to see all available package in hub but no result now
 helm search repo mychartrepo
 
+ 
 
-
-#install package from this repo
-helm install myapp mychartrepo/mychart
-
-
-#upload helm chart into repo
 curl --data-binary "@mychart-0.1.0.tgz" http://localhost:8080/api/charts
-
 helm repo update  
-helm repo ls
 helm search repo mychartrepo
+
+ 
+
 
 #install package from this repo
 helm install myapp mychartrepo/mychart
 helm ls
+kubectl get pod
 
+ 
 
-#Create new version of chart  modify Chart.yaml's version 
+#Create new version of chart  modify Chart.yaml's version
 
-vi mychart/Chart.yaml		#change the versions
+ 
+
+vi mychart/Chart.yaml        #change the versions(vi myapp1/Chart.yaml)
+
+ 
 
 # now create 
-helm package mychart		#(dir name)
+helm package mychart        #(dir name myapp1)
 ls
 # now you can see 2.0 zip file
+
+ 
 
 #upload new version chart  into repo
 curl --data-binary "@mychart-0.2.0.tgz" http://localhost:8080/api/charts
 
+ 
+
 helm repo update
+
+ 
 
 #list helm chart in repo
 
+ 
+
 helm search repo mychartrepo -l
+
+ 
 
 # Upgrade Helm installed Chart
 helm upgrade myapp mychartrepo/mychart
 helm ls
 
+ 
+
 helm history myapp
+
+ 
 
 helm rollback myapp 1
 helm history myappp
+helm uninstall myapp
+
+ 
 
 #delete repo
- helm repo remove mychartrepo
- helm repo ls
-
+helm repo remove mychartrepo
+helm repo ls
