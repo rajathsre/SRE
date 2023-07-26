@@ -1,0 +1,97 @@
+Task: 1 install Istio 
+
+istio analyze
+Install istio 
+
+curl -L https://istio.io/downloadIstio | sh -
+
+mv istio-1.18.1/bin/istioctl /bin
+
+istioctl install --set profile=demo -y
+
+	default	demo			minimal		remote		empty	preview
+	Core components						
+    istio-egressgateway		✔				
+    istio-ingressgateway	✔			✔				✔
+    istiod					✔			✔				✔			✔
+
+
+
+
+kubectl label namespace default istio-injection=enabled
+
+cd istio-1.18.1/
+kubectl create -f samples/addons/kiali.yaml
+kubectl create -f samples/addons/prometheus.yaml
+( make these apps service to nodeport service so that we can access them from browser )
+ 
+kubectl get all --all-namespaces
+
+kubectl -n istio-system get services
+
+kubectl -n istio-system edit svc kiali
+make it NodePort
+
+kubectl get pods
+
+istioctl analyze
+
+Task 2: install bookinfo application and check no istio containers in it's pods
+this application is example of canary deployment. 
+
+
+kubectl get namespaces --show-labels
+
+kubectl create namespace noistio
+
+kubectl apply --namespace=noistio -f samples/bookinfo/platform/kube/bookinfo.yaml
+
+kubectl get pods --namespace=noistio
+kubectl get all --namespace=noistio
+
+Now goto the kiali dashboard and check your bookinfo application it will
+show you sidecar missing..
+
+kubectl delete namespace noistio
+
+
+Task 3: enable istio on namespace and deploy bookinfo application
+
+kubectl create namespace withistio
+Enable istio in newly created namespace.
+kubectl label namespace withistio istio-injection=enabled
+
+kubectl apply --namespace=withistio -f samples/bookinfo/platform/kube/bookinfo.yaml
+
+kubectl get pods --namespace=withistio
+kubectl get all --namespace=withistio
+
+kubectl get services --namespace=withistio
+
+Change product service to nodeport and access it from browser
+
+kubectl --namespace=withistio edit svc productpage
+
+access product page using nodePort
+kubectl --namespace=withistio get svc
+ 
+
+than check kiali dashboard it will not show missing side-Car 
+ 
+kubectl get all --all-namespaces
+
+
+Task: 4 install jaeger-operator Request Tracing tool
+
+
+kubectl apply -f https://raw.githubusercontent.com/istio/istio/release-1.17/samples/addons/jaeger.yaml
+
+make accessable Jaeget
+ kubectl edit svc tracing -n istio-system
+ change type to NodePort
+ kubectl get svc -n istio-system
+ 
+ 
+
+change tracing service to nodeport and access bookinfo application
+now see traces...
